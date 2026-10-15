@@ -1,0 +1,31 @@
+modLoader="javafml"
+loaderVersion="[47,)"
+license="All Rights Reserved"
+issueTrackerURL="https://example.invalid/nosidebar"
+
+[[mods]]
+modId="nosidebar"
+version="1.0.2"
+displayName="NoSidebar - 隐藏计分板侧栏"
+authors="deepseek"
+description='''
+纯客户端 Mod：隐藏游戏右侧的原版计分板侧边栏（例如死亡榜）。
+
+- 只改本地渲染，不影响服务器与计分板数据本身；
+- 开关文件：config/nosidebar.toml（hideScoreboardSidebar = true/false）；
+- 服务端不需要安装。
+'''
+
+[[dependencies.nosidebar]]
+    modId="forge"
+    mandatory=true
+    versionRange="[47,)"
+    ordering="NONE"
+    side="CLIENT"
+
+[[dependencies.nosidebar]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.20.1,1.20.2)"
+    ordering="NONE"
+    side="CLIENT"

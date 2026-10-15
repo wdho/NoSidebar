@@ -1,0 +1,26 @@
+# Build output (javac classes + generated jar)
+build/
+
+# Unrelated jar that happened to sit in this working directory (not part of this project)
+/witch_curse-1.0.0.jar
+
+# Local archives of the project folder
+/*.zip
+/*.7z
+
+# IDE
+.idea/
+*.iml
+*.ipr
+*.iws
+.eclipse/
+.settings/
+bin/
+.classpath
+.project
+.vscode/
+
+# OS / misc
+Thumbs.db
+Desktop.ini
+*.log

@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+Specification-Title: NoSidebar
+Specification-Vendor: deepseek
+Specification-Version: 1.0
+Implementation-Title: NoSidebar
+Implementation-Vendor: deepseek
+Implementation-Version: 1.0.2
+MixinConfigs: nosidebar.mixins.json
