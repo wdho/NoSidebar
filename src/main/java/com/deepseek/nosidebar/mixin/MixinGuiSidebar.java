@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import com.deepseek.nosidebar.NoSidebarConfig;
 
 /**
- * 客户端隐藏右侧计分板侧边栏。
+ * 客户端隐藏右侧计分板侧边栏（支持"按需查看"模式）。
  *
  * <p>目标方法：{@code net.minecraft.client.gui.Gui#m_280030_}，
  * 即官方名 {@code displayScoreboardSidebar(GuiGraphics, Objective)}。
@@ -17,6 +17,9 @@ import com.deepseek.nosidebar.NoSidebarConfig;
  *
  * <p>刻意使用 <b>SRG 名</b> + {@code remap = false}，因此不需要 refmap，
  * 也不会因混淆映射差异而注入失败。取消注入只影响本地渲染，纯客户端行为。</p>
+ *
+ * <p>是否取消不只看配置，还看当前有没有打开背包/箱子等容器界面：
+ * {@code screens} 模式下打开这类界面时就不取消，原版侧栏照常绘制 —— 这就是"打开背包看榜"。</p>
  *
  * <p>注意：本类必须待在 mixin 专用子包（{@code ...nosidebar.mixin}）里。
  * 一旦 mixin 配置的 package 覆盖到 {@code NoSidebarMod}，FML 加载主类时就会抛
@@ -29,11 +32,11 @@ public class MixinGuiSidebar {
     @Inject(method = "m_280030_", at = @At("HEAD"), cancellable = true, require = 1, remap = false)
     private void nosidebar$cancelSidebarRendering(CallbackInfo ci) {
         try {
-            if (NoSidebarConfig.isSidebarHidden()) {
+            if (NoSidebarConfig.shouldHideSidebar()) {
                 ci.cancel();
             }
         } catch (Throwable ignored) {
-            // 配置读取出任何问题都不应该影响游戏：静默放行，保持原版行为。
+            // 配置或界面状态读取出任何问题都不应该影响游戏：静默放行。
         }
     }
 }

@@ -53,7 +53,7 @@
 3. 把 `src\main\resources` 拷进 classes 目录
 4. `jar --create --file build\nosidebar-<版本>-forge-1.20.1.jar --manifest src\main\MANIFEST.MF -C build\classes .`
 
-产物：`build/nosidebar-1.0.2-forge-1.20.1.jar`
+产物：`build/nosidebar-1.1.0-forge-1.20.1.jar`
 
 **发布时**需要手动把它复制到 `dist/`（`build/` 已被 `.gitignore` 忽略，`dist/` 会被提交）。
 
@@ -72,6 +72,8 @@ python audit_injection.py
 - 编译后注解常量池里确实有 `@Mixin` / `@Inject` / 目标类名 / SRG 名
 - 用 `javap` 交叉验证注解参数（`targets` / `method` / `at` / `cancellable` / `require` / `remap`）
 - 目标方法在真实 SRG jar 中**存在且唯一**，签名匹配
+- **反射用的 API 名在 SRG jar 中确实存在**：`Minecraft.m_91087_()`、字段 `f_91080_`、
+  `AbstractContainerScreen` 类（这是 1.1.0 "按需查看"的依赖）
 
 `audit_injection.py` 检查：
 
@@ -148,7 +150,7 @@ required.
 The script (1) locates `.minecraft\libraries`, (2) runs `javac`, (3) copies `src\main\resources` into the
 classes dir, and (4) packs the jar with `src\main\MANIFEST.MF`.
 
-Output: `build/nosidebar-1.0.2-forge-1.20.1.jar`. For a release, copy it into `dist/` manually
+Output: `build/nosidebar-1.1.0-forge-1.20.1.jar`. For a release, copy it into `dist/` manually
 (`build/` is git-ignored, `dist/` is committed).
 
 ### Verification
@@ -161,8 +163,9 @@ python audit_injection.py
 
 `verify_jar.py` checks the jar entries, the `MixinConfigs` manifest attribute, the mixin config, `mods.toml`,
 that the **mixin package contains only mixin classes** (the 1.0.1 crash regression guard), the compiled
-annotation constants, the annotation arguments via `javap`, and that the target method exists uniquely with
-a matching signature in the real SRG jar.
+annotation constants, the annotation arguments via `javap`, that the target method exists uniquely with
+a matching signature in the real SRG jar, and that the **reflected API names** exist there too
+(`Minecraft.m_91087_()`, field `f_91080_`, `AbstractContainerScreen` — required by the 1.1.0 on-demand mode).
 
 `audit_injection.py` reads the compiled annotations with **Mixin's own ASM** (exactly what Mixin sees at
 runtime), resolves the injection point in the real `Gui` class under `remap = false` rules, validates the

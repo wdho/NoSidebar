@@ -20,13 +20,13 @@
 
 | 部分 | 由谁完成 |
 | --- | --- |
-| 全部 Java 源码（3 个文件，155 行） | **AI** |
+| 全部 Java 源码（4 个文件，288 行） | **AI** |
 | `nosidebar.mixins.json` / `mods.toml` / `pack.mcmeta` / `MANIFEST.MF` | **AI** |
 | `build.ps1`（javac + jar 手工构建脚本） | **AI** |
 | `verify_jar.py` / `audit_injection.py`（结构与注入校验脚本） | **AI** |
-| `README.md` / `README_EN.md` / 本文件 | **AI** |
+| `README.md` / `README_EN.md` / `BUILDING.md` / 本文件 | **AI** |
 | 反汇编读取 SRG 方法名、字节码校验、注入装配审计、崩溃日志分析 | **AI 执行**，决策者确认结论 |
-| 需求定义、目标版本选择、"做成模组"这一方案取舍 | **决策者** |
+| 需求定义、目标版本选择、"做成模组"这一方案取舍、"按需查看"的交互设想 | **决策者** |
 | **真机启动验证**（确认侧栏确实消失） | **决策者** |
 
 #### 这意味着什么
@@ -42,8 +42,11 @@
 
 ### 这个模组做什么
 
-它让**你自己的客户端**不再绘制原版计分板侧边栏（也就是服务端常挂在右侧的"死亡榜"等榜单）。
-实现方式是给 `Gui#displayScoreboardSidebar` 注入一个 `ci.cancel()`，可在配置里关闭。
+它让**你自己的客户端**按需显示原版计分板侧边栏（也就是服务端常挂在右侧的"死亡榜"等榜单）：
+可以一直隐藏，也可以只在打开背包 / 箱子等界面时显示（1.1.0 起的默认行为），或在配置里完全关掉。
+
+实现方式是给 `Gui#displayScoreboardSidebar` 注入一个可取消的 Hook，并按配置决定是否 `ci.cancel()`；
+"当前是否打开了容器界面"通过反射读取 `Minecraft` 的 `screen` 字段判断。
 
 它**只影响本地渲染**：不改计分板数据、不改服务端、不影响其它玩家、不发送任何网络包。
 
@@ -90,13 +93,13 @@ by AI (a large language model coding agent).**
 
 | Part | Author |
 | --- | --- |
-| All Java source (3 files, 155 lines) | **AI** |
+| All Java source (4 files, 288 lines) | **AI** |
 | `nosidebar.mixins.json` / `mods.toml` / `pack.mcmeta` / `MANIFEST.MF` | **AI** |
 | `build.ps1` (hand-rolled javac + jar build script) | **AI** |
 | `verify_jar.py` / `audit_injection.py` (structure and injection checks) | **AI** |
-| `README.md` / `README_EN.md` and this file | **AI** |
+| `README.md` / `README_EN.md` / `BUILDING.md` and this file | **AI** |
 | Disassembling the SRG method name, bytecode checks, injection audit, crash-log analysis | **performed by AI**, conclusions confirmed by the decision-maker |
-| Requirements, target version, the decision to build a mod at all | **Decision-maker** |
+| Requirements, target version, the decision to build a mod at all, the "on demand" interaction idea | **Decision-maker** |
 | **In-game verification** (confirming the sidebar is really gone) | **Decision-maker** |
 
 #### What this means for you
@@ -113,9 +116,12 @@ by AI (a large language model coding agent).**
 
 ### What this mod does
 
-It stops **your own client** from drawing the vanilla scoreboard sidebar (the "death leaderboard" servers
-often display on the right). It does so by injecting a `ci.cancel()` into `Gui#displayScoreboardSidebar`;
-this can be turned off in the config.
+It controls how **your own client** displays the vanilla scoreboard sidebar (the "death leaderboard"
+servers often put on the right): it can stay hidden, be shown only while an inventory / container screen
+is open (the default since 1.1.0), or be left completely vanilla.
+
+It works by injecting a cancellable hook into `Gui#displayScoreboardSidebar` and deciding whether to
+`ci.cancel()`; "is a container screen open" is read via reflection from `Minecraft`'s `screen` field.
 
 It **only affects local rendering**: no scoreboard data is changed, no server changes, no effect on other
 players, and no packets are sent.

@@ -5,14 +5,15 @@ issueTrackerURL="https://example.invalid/nosidebar"
 
 [[mods]]
 modId="nosidebar"
-version="1.0.2"
+version="1.1.0"
 displayName="NoSidebar - 隐藏计分板侧栏"
 authors="deepseek"
 description='''
-纯客户端 Mod：隐藏游戏右侧的原版计分板侧边栏（例如死亡榜）。
+纯客户端 Mod：控制右侧原版计分板侧边栏（例如死亡榜）的显示。
 
 - 只改本地渲染，不影响服务器与计分板数据本身；
-- 开关文件：config/nosidebar.toml（hideScoreboardSidebar = true/false）；
+- 隐藏模式：always（一直隐藏）/ screens（平时隐藏，打开背包等界面时显示）/ never（原版）；
+- 配置文件：config/nosidebar.toml（hideMode = "screens"）；
 - 服务端不需要安装。
 '''
 

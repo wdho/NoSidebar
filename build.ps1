@@ -42,7 +42,7 @@ $ResDir   = Join-Path $ProjectRoot "src\main\resources"
 $Manifest = Join-Path $ProjectRoot "src\main\MANIFEST.MF"
 $BuildDir = Join-Path $ProjectRoot "build"
 $ClassDir = Join-Path $BuildDir "classes"
-$OutJar   = Join-Path $BuildDir "nosidebar-1.0.2-forge-1.20.1.jar"
+$OutJar   = Join-Path $BuildDir "nosidebar-1.1.0-forge-1.20.1.jar"
 
 if (Test-Path $ClassDir) { Remove-Item -Recurse -Force $ClassDir }
 New-Item -ItemType Directory -Force -Path $ClassDir | Out-Null

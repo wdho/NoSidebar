@@ -13,7 +13,7 @@ import subprocess
 import sys
 import zipfile
 
-JAR = r"D:\我的世界\deepseek1区\build\nosidebar-1.0.2-forge-1.20.1.jar"
+JAR = r"D:\我的世界\deepseek1区\build\nosidebar-1.1.0-forge-1.20.1.jar"
 LIB = r"D:\我的世界\魔归\.minecraft\libraries"
 SRG = os.path.join(LIB, r"net\minecraft\client\1.20.1-20230612.114412\client-1.20.1-20230612.114412-srg.jar")
 JAVAP = r"D:\zulu21\bin\javap.exe"
@@ -70,6 +70,7 @@ with zipfile.ZipFile(JAR) as z:
     for need in ("com/deepseek/nosidebar/mixin/MixinGuiSidebar.class",
                  "com/deepseek/nosidebar/NoSidebarConfig.class",
                  "com/deepseek/nosidebar/NoSidebarMod.class",
+                 "com/deepseek/nosidebar/ScreenState.class",
                  "nosidebar.mixins.json", "META-INF/mods.toml", "META-INF/MANIFEST.MF"):
         check(need in names, "entry present: %s" % need)
 
@@ -87,7 +88,14 @@ with zipfile.ZipFile(JAR) as z:
               if n.startswith(mod_prefix) and not n.startswith(pkg_prefix)
               and n.endswith(".class")]
     print("     outside mixin package: " + ", ".join(sorted(strays)))
-    check(len(strays) == 2, "mod entry + config classes live outside the mixin package")
+    expected_strays = {
+        "com/deepseek/nosidebar/NoSidebarMod.class",
+        "com/deepseek/nosidebar/NoSidebarConfig.class",
+        "com/deepseek/nosidebar/NoSidebarConfig$Mode.class",
+        "com/deepseek/nosidebar/ScreenState.class",
+    }
+    check(set(strays) == expected_strays,
+          "only mod entry + config + screen-state classes live outside the mixin package")
 
 print("\n[2] manifest")
 with zipfile.ZipFile(JAR) as z:
@@ -152,6 +160,32 @@ for h in hits:
 check(len(hits) == 1, "exactly one method named m_280030_")
 check(any("(net.minecraft.client.gui.GuiGraphics, net.minecraft.world.scores.Objective)" in h
           for h in hits), "signature matches displayScoreboardSidebar")
+
+# ---- [8] the reflection names used by ScreenState must exist in the runtime SRG jar ----
+print("\n[8] ScreenState reflection names in Forge 47.4.10 SRG jar")
+srg_dir = os.path.join(TMP, "srg")
+for rel in ("net/minecraft/client/Minecraft.class",
+            "net/minecraft/client/gui/screens/inventory/AbstractContainerScreen.class"):
+    dest = os.path.join(srg_dir, rel.replace("/", os.sep))
+    os.makedirs(os.path.dirname(dest), exist_ok=True)
+    with zipfile.ZipFile(SRG) as z:
+        try:
+            open(dest, "wb").write(z.read(rel))
+        except KeyError:
+            check(False, "class present in SRG jar: " + rel)
+
+out3 = subprocess.run([JAVAP, "-p", "-classpath", srg_dir, "net.minecraft.client.Minecraft"],
+                      capture_output=True, text=True, encoding="utf-8", errors="replace")
+mc_txt = out3.stdout
+check(re.search(r"public static net\.minecraft\.client\.Minecraft m_91087_\(\);", mc_txt) is not None,
+      "Minecraft.getInstance() SRG name m_91087_() exists")
+check(re.search(r"public net\.minecraft\.client\.gui\.screens\.Screen f_91080_;", mc_txt) is not None,
+      "Minecraft.screen field SRG name f_91080_ exists (public)")
+out4 = subprocess.run([JAVAP, "-p", "-classpath", srg_dir,
+                       "net.minecraft.client.gui.screens.inventory.AbstractContainerScreen"],
+                      capture_output=True, text=True, encoding="utf-8", errors="replace")
+check("public abstract class net.minecraft.client.gui.screens.inventory.AbstractContainerScreen" in out4.stdout,
+      "AbstractContainerScreen is a public abstract class (official class name in runtime)")
 
 print("\n" + "=" * 78)
 if problems:
