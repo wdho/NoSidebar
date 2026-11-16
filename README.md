@@ -130,11 +130,11 @@ Mixin 把整个包当成 mixin 包，`@Mod` 主类被拦住，FML 启动即抛 `
 
 审计脚本只能证明"注入装配是正确的"，**不能替代真机测试**。本模组尚未覆盖所有模组组合。
 
-## 许可与第三方
+## 声明
 
-- 本项目采用 **MIT** 许可，见 [LICENSE](LICENSE)。
-- 本项目**不包含** Minecraft、Forge 或任何第三方模组的代码，仅在 Mixin 注解中以字符串形式
-  引用一个原版方法名。
-- "Minecraft" 是 Mojang Studios 的商标。本项目是未获官方认可的非官方作品，与 Mojang Studios、
-  Microsoft、Forge 团队均无隶属或背书关系。
-- 本模组由 AI 构建，分工与免责条款见 [DISCLAIMER.md](DISCLAIMER.md)。
+- 作者与维护者：**wdho**。需求、方案取舍与发布由维护者决定；原项目声明记录代码、构建脚本与文档由 **DeepSeek Harness / `deepseek-flash`** 辅助生成。本次声明整理使用 **OpenAI Codex 辅助**。
+- 本项目是非官方社区模组，与 Mojang Studios、Microsoft、Forge 团队或整合包作者无隶属、合作或背书关系。相关游戏、商标及第三方内容归各自权利人所有。
+- 本仓库原创代码按 [MIT](LICENSE) 许可发布；分发时请保留版权与许可证，MIT 不涵盖 Minecraft、Forge 或上游模组本体。
+- 本模组只控制本地计分板侧栏的显示，不改变计分板数据或服务端权限；多人游戏仍应遵守服务器规则。
+- 验证结果及版本范围以 README 的记录为准，不承诺所有游戏版本、模组组合或服务器环境均兼容；按现状提供，担保与责任条款见 [LICENSE](LICENSE)。
+- 贡献分工及完整中英文说明见 [DISCLAIMER.md](DISCLAIMER.md)。

@@ -135,11 +135,11 @@ Always hidden.
 The audit scripts prove that the *injection is wired correctly*; they are **not a substitute
 for running the game**. Not every mod combination has been covered.
 
-## Licensing and third parties
+## Declaration
 
-- Licensed under **MIT**, see [LICENSE](LICENSE).
-- This project contains **no** Minecraft, Forge or third-party mod code. It only references one
-  vanilla method name as a string inside a Mixin annotation.
-- "Minecraft" is a trademark of Mojang Studios. This is an unofficial, unendorsed work, not
-  affiliated with or endorsed by Mojang Studios, Microsoft or the Forge team.
-- Built with AI — see [DISCLAIMER.md](DISCLAIMER.md) for the division of labour and disclaimers.
+- Author and maintainer: **wdho**. The maintainer determines requirements, design choices and releases. The original disclosure records AI-generated code, build scripts and documentation using **DeepSeek Harness / `deepseek-flash`**. This declaration rewrite used **OpenAI Codex assistance**.
+- This is an unofficial community mod, not affiliated with, partnered with or endorsed by Mojang Studios, Microsoft, the Forge team or modpack authors. Game names, trademarks and third-party content belong to their respective owners.
+- Original code in this repository is released under [MIT](LICENSE). Retain copyright and license notices when redistributing. MIT does not cover Minecraft, Forge or upstream mods.
+- This mod changes only local scoreboard-sidebar visibility, not scoreboard data or server permissions. Follow the rules of the servers you use.
+- Verification and supported versions are limited to the records in the README; no claim is made for every game version, mod combination or server environment. Provided as is; warranty and liability terms are in [LICENSE](LICENSE).
+- See [DISCLAIMER.md](DISCLAIMER.md) for contribution details and the full bilingual declaration.
