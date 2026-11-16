@@ -1,0 +1,17 @@
+# Normalise line endings in the repository
+* text=auto
+
+# Binaries
+*.jar binary
+*.png binary
+*.ogg binary
+*.zip binary
+
+# Sources and configs as LF
+*.java text eol=lf
+*.json text eol=lf
+*.toml text eol=lf
+*.md text eol=lf
+*.py text eol=lf
+*.ps1 text eol=crlf
+*.MF text eol=crlf
